@@ -217,27 +217,27 @@
         guidance_pattern.push(`${ph}`);
       }
 
-      // Always taper
+      // Always taper. The 4 is because the blocks are all 4 weeks long
       end_guidance = guidance_pattern.slice(0-Math.min(totalWeeks,4));
     
       // Taper is already accounted for in end_guidance, don't include it here
-      start_guidance = guidance_pattern.slice(0, guidance_pattern.length-4);
+      start_guidance = guidance_pattern.slice(0, guidance_pattern.length-end_guidance.length);
     
-      // Make list start at sp
+      // Make list start at sp. The 4 is because the blocks are all 4 weeks long
       start_guidance = start_guidance.slice(idx*4, guidance_pattern.length);
     
       // don't take longer than we have. It won't slice longer than there is in the list
-      start_guidance = start_guidance.slice(0, totalWeeks-4);
+      start_guidance = start_guidance.slice(0, totalWeeks-end_guidance.length);
 
       //if time to taper is longer than our pattern, fill in after sp and before the taper
       if (totalWeeks-4 > start_guidance.length){
-        // grab sp
+        // grab sp. The 4 is because the blocks are all 4 weeks long
         let new_start = start_guidance.slice(0, 4);
         // fill
         for (let i = 0; i < totalWeeks-4-start_guidance.length; i++){
-          new_start.push(long_lead[i%8]);
+          new_start.push(long_lead[i%long_lead.length]);
         }
-        // grab end of pattern, except taper, which is in end_guidance
+        // grab end of pattern, except taper, which is in end_guidance. The 4 is to skip the sp phase, because it was already added. Like all blocks, it is 4 weeks long.
         for (const week of start_guidance.slice(4)){
           new_start.push(week);
         }
